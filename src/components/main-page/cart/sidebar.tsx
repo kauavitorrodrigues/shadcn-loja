@@ -1,17 +1,39 @@
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { RocketIcon } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
+import { RocketIcon, ShoppingCart, UtensilsCrossed } from "lucide-react"
+import { useCartStore } from "@/stores/cart.store"
+import { formatCurrency } from "@/lib/utils"
+import { CartItem } from "./cart-item"
+
+import { 
+Sheet, SheetContent, SheetHeader, 
+SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
 export const CartSidebar = () => {
+
+    const { cart } = useCartStore( state => state )
+
+    let subTotal = 0
+    
+    for ( let item of cart ) {
+
+        subTotal += item.quantity * item.product.price
+
+    }
+
     return (
 
         <Sheet>
 
             <SheetTrigger asChild className="flex items-center" >
 
-                <Button variant="outline"> 
+                <Button variant="outline" className="relative" > 
+
                     <RocketIcon className="h-[1.2rem] w-[1.2rem]"  /> 
                     <p className="ml-2 text-sm" >Carrinho</p> 
+
+                    { cart.length > 0 && <div className="absolute bg-red-600 rounded-full size-3 -right-1 -top-0.5" ></div> }
+
                 </Button>
 
             </SheetTrigger>
@@ -24,7 +46,49 @@ export const CartSidebar = () => {
 
                 </SheetHeader>
 
-                ...
+                <Separator className="mt-3 mb-6"/>
+
+                { cart.length > 0 ? 
+
+                    <div className="flex flex-col gap-5">
+
+                        { cart.map( item => (
+
+                            <CartItem key={ item.product.id } item={ item } />
+
+                        ))}
+
+                    </div>
+
+                    :   
+                    
+                    <div className="flex flex-col gap-3 w-full items-center justify-center" >
+                        <ShoppingCart size={50} />
+                        <p className="text-center text-sm max-w-48" > Seu carrinho está vazio, adicione um item para continuar :)</p>
+                    </div>
+                
+                }
+
+
+                <Separator className="my-6"/>
+
+                <div className="flex justify-between items-center text-xs">
+
+                    <p>Subtotal</p>
+                    <p> { formatCurrency(subTotal) } </p>
+
+                </div>
+
+                <Separator className="my-6"/>
+
+                <div className="text-center" >
+
+                    <Button variant="outline" disabled={ cart.length <= 0 } > 
+                        <UtensilsCrossed className="h-[1.2rem] w-[1.2rem]"  /> 
+                        <p className="ml-2 text-sm" >Finalizar Compra</p> 
+                    </Button>                
+
+                </div>
 
             </SheetContent>
 
