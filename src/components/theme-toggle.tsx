@@ -15,7 +15,7 @@ import {
 
 export function ToggleTheme() {
 
-  const { setTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
 
   return (
 
@@ -33,15 +33,15 @@ export function ToggleTheme() {
 
         <DropdownMenuContent align="end" className="min-w-[7rem]" >
 
-            <DropdownMenuItem onClick={() => setTheme("light")} className="flex gap-3 cursor-pointer" >
+            <DropdownMenuItem onClick={() => setTheme("light")} className="flex gap-3 cursor-pointer" disabled={ theme === 'light' } >
                 <SunIcon size={18} /> Claro
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={() => setTheme("dark")} className="flex gap-3 cursor-pointer" >
+            <DropdownMenuItem onClick={() => setTheme("dark")} className="flex gap-3 cursor-pointer" disabled={ theme === 'dark' }>
                 <MoonIcon size={18} /> Escuro
             </DropdownMenuItem>
 
-            <DropdownMenuItem onClick={() => setTheme("system")} className="flex gap-3 cursor-pointer" >
+            <DropdownMenuItem onClick={() => setTheme("system")} className="flex gap-3 cursor-pointer" disabled={ theme === 'system' } >
                 <LaptopIcon size={18} /> Sistema
             </DropdownMenuItem>
 
