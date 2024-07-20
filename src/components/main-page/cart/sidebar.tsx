@@ -3,22 +3,23 @@ import { Separator } from "@/components/ui/separator"
 import { RocketIcon, ShoppingCart, UtensilsCrossed } from "lucide-react"
 import { useCartStore } from "@/stores/cart.store"
 import { formatCurrency } from "@/lib/utils"
-import { CartItem } from "./cart-item"
+import { CartItem } from "@/components/main-page/cart/cart-item"
 
 import { 
 Sheet, SheetContent, SheetHeader, 
 SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { useState } from "react"
+import { CheckoutDialog } from "@/components/main-page/checkout/dialog"
 
 export const CartSidebar = () => {
-
+    
+    const [ checkoutOpen, setCheckoutOpen ] = useState(false)
     const { cart } = useCartStore( state => state )
 
     let subTotal = 0
     
     for ( let item of cart ) {
-
         subTotal += item.quantity * item.product.price
-
     }
 
     return (
@@ -83,12 +84,20 @@ export const CartSidebar = () => {
 
                 <div className="text-center" >
 
-                    <Button variant="outline" disabled={ cart.length <= 0 } > 
-                        <UtensilsCrossed className="h-[1.2rem] w-[1.2rem]"  /> 
+                    <Button 
+                        variant="outline" 
+                        disabled={ cart.length <= 0 } 
+                        onClick={ () => setCheckoutOpen(!checkoutOpen) }
+                    >  <UtensilsCrossed className="h-[1.2rem] w-[1.2rem]"  /> 
                         <p className="ml-2 text-sm" >Finalizar Compra</p> 
                     </Button>                
 
                 </div>
+
+                <CheckoutDialog
+                    open={checkoutOpen}
+                    onOpenChange={setCheckoutOpen}
+                />
 
             </SheetContent>
 
